@@ -21,6 +21,7 @@ target/
 .mvn
 application.yaml
 test/
+static
 
 ### NetBeans ###
 /nbproject/private/
