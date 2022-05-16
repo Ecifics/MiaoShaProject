@@ -1,6 +1,7 @@
 package com.miaoshaproject.dao;
 
 import com.miaoshaproject.pojo.UserDO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author Ecifics
@@ -18,4 +19,6 @@ public interface UserDOMapper {
     int updateByPrimaryKeySelective(UserDO record);
 
     int updateByPrimaryKey(UserDO record);
+
+    UserDO selectByTelphone(@Param("telphone") String telphone);
 }

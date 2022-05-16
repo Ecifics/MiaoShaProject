@@ -19,6 +19,14 @@ public interface UserService {
     /**
      * 用户注册
      * @param userModel object
+     * @exception BusinessException
      */
     void register(UserModel userModel) throws BusinessException;
+
+    /**
+     * 用于用户登录时用户信息校验
+     * @param telphone user's telephone number
+     * @param encrptPassword the encoded password of user
+     */
+    UserModel validateLogin(String telphone, String encrptPassword) throws BusinessException;
 }

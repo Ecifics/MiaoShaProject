@@ -90,6 +90,24 @@ public class UserController extends BaseController {
         return CommonReturnType.create(null);
     }
 
+    @PostMapping(value = "/login", consumes = {CONTENT_TYPE_FORMED})
+    public CommonReturnType login(@RequestParam("telphone") String telphone,
+                                  @RequestParam("password") String password) throws BusinessException, NoSuchAlgorithmException {
+        if (org.apache.commons.lang3.StringUtils.isEmpty(telphone) ||
+                org.apache.commons.lang3.StringUtils.isEmpty(password)) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+
+        // 用户登录校验
+        UserModel userModel = userService.validateLogin(telphone, this.encodeByMd5(password));
+
+        // 校验成功，加入到用户登录成功的session内
+        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
+        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
+
+        return CommonReturnType.create(null);
+    }
+
     public String encodeByMd5(String password) throws NoSuchAlgorithmException {
         // 确定计算方法
         MessageDigest md5 = MessageDigest.getInstance("MD5");
