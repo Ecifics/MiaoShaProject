@@ -2,7 +2,7 @@ package com.miaoshaproject.controller.viewobject;
 
 /**
  * @author Ecifics
- * @Description TODO
+ * @Description 表示层对象数据
  * @date 5/14/2022-7:49 PM
  */
 public class UserVO {

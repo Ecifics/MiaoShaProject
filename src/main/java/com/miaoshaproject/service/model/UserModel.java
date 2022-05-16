@@ -2,7 +2,7 @@ package com.miaoshaproject.service.model;
 
 /**
  * @author Ecifics
- * @Description TODO
+ * @Description service层对象
  * @date 5/14/2022-7:34 PM
  */
 public class UserModel {

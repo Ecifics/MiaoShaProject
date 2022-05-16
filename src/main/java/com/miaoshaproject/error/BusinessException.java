@@ -2,7 +2,7 @@ package com.miaoshaproject.error;
 
 /**
  * @author Ecifics
- * @Description TODO
+ * @Description 异常类
  * @date 5/14/2022-10:55 PM
  */
 public class BusinessException extends Exception implements CommonError {

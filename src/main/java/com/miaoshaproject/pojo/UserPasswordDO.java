@@ -1,11 +1,24 @@
 package com.miaoshaproject.pojo;
 
+/**
+ * @author Ecifics
+ * dao层数据
+ */
 public class UserPasswordDO {
     private Integer id;
 
     private String encrptPassword;
 
     private Integer userId;
+
+    @Override
+    public String toString() {
+        return "UserPasswordDO{" +
+                "id=" + id +
+                ", encrptPassword='" + encrptPassword + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
 
     public Integer getId() {
         return id;

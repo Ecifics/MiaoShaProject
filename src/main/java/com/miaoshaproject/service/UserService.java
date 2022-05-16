@@ -6,7 +6,7 @@ import com.miaoshaproject.service.model.UserModel;
 
 /**
  * @author Ecifics
- * @Description TODO
+ * @Description 用户service层接口
  * @date 5/14/2022-7:30 PM
  */
 public interface UserService {

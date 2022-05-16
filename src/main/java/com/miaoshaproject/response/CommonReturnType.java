@@ -2,7 +2,7 @@ package com.miaoshaproject.response;
 
 /**
  * @author Ecifics
- * @Description TODO
+ * @Description 通用返回类，用于将数据返回到前端
  * @date 5/14/2022-8:04 PM
  */
 public class CommonReturnType {

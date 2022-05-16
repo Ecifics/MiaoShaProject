@@ -2,7 +2,7 @@ package com.miaoshaproject.error;
 
 /**
  * @author Ecifics
- * @Description TODO
+ * @Description 异常枚举类
  * @date 5/14/2022-10:46 PM
  */
 public enum EmBusinessError implements CommonError {
@@ -17,7 +17,7 @@ public enum EmBusinessError implements CommonError {
 
     private String errMsg;
 
-    private EmBusinessError(int errCode, String errMsg) {
+    EmBusinessError(int errCode, String errMsg) {
         this.errCode = errCode;
         this.errMsg = errMsg;
     }
