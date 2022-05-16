@@ -39,6 +39,7 @@
                 data:{
                     "telphone":telphone
                 },
+                xhrFields:{withCredentials:true},
                 success:function(data) {
                     if (data.status == "success") {
                         alert("otp已经发送到您的手机上，请注意查收");

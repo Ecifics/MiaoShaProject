@@ -7,13 +7,15 @@ import com.miaoshaproject.error.EmBusinessError;
 import com.miaoshaproject.response.CommonReturnType;
 import com.miaoshaproject.service.UserService;
 import com.miaoshaproject.service.model.UserModel;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
@@ -23,7 +25,7 @@ import java.util.Random;
  */
 @RestController("user")
 @RequestMapping("/user")
-@CrossOrigin
+@CrossOrigin(allowCredentials = "true", allowedHeaders = "*")
 public class UserController extends BaseController {
 
     @Autowired
@@ -69,10 +71,10 @@ public class UserController extends BaseController {
                                      @RequestParam("gender") Integer gender,
                                      @RequestParam("age") Integer age,
                                      @RequestParam("password") String password
-    ) throws BusinessException {
+    ) throws BusinessException, NoSuchAlgorithmException {
         // 验证手机号和的otpCode对应
         String inSessionOtpCode = (String) this.httpServletRequest.getSession().getAttribute(telphone);
-        if (StringUtils.equals(otpCode, inSessionOtpCode)) {
+        if (!StringUtils.equals(otpCode, inSessionOtpCode)) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "短信验证码不符合");
         }
 
@@ -82,10 +84,21 @@ public class UserController extends BaseController {
         userModel.setAge((age));
         userModel.setTelphone(telphone);
         userModel.setRegisterMode("byphone");
-        userModel.setEncrptPassword(MD5Encoder.encode(password.getBytes(StandardCharsets.UTF_8)));
+        userModel.setEncrptPassword(this.encodeByMd5(password));
 
         userService.register(userModel);
         return CommonReturnType.create(null);
+    }
+
+    public String encodeByMd5(String password) throws NoSuchAlgorithmException {
+        // 确定计算方法
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+
+        // 加密字符串
+        String encrptPassword = base64Encoder.encode(md5.digest(password.getBytes(StandardCharsets.UTF_8)));
+
+        return encrptPassword;
     }
 
     private UserVO convertFromModel(UserModel userModel) {

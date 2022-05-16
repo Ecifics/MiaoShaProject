@@ -110,8 +110,9 @@
                     "gender":gender,
                     "otpCode":otpCode
                 },
+                xhrFields:{withCredentials:true},
                 success:function(data) {
-                    if (data.status = "success") {
+                    if (data.status == "success") {
                         alert("注册成功");
                     } else {
                         alert("注册失败，原因为" + data.data.errMsg);
