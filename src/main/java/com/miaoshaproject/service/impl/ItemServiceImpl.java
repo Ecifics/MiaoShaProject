@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Ecifics
@@ -46,11 +47,11 @@ public class ItemServiceImpl implements ItemService {
 
         // 将service层改成其对应的pojo对象
         ItemDO itemDO = convertItemDOFromItemModel(itemModel);
-        ItemStockDO itemStockDO = convertItemStockDOFromItemModel(itemModel);
 
         // 写入数据库
         itemDOMapper.insertSelective(itemDO);
         itemModel.setId(itemDO.getId());
+        ItemStockDO itemStockDO = convertItemStockDOFromItemModel(itemModel);
 
         itemStockDOMapper.insertSelective(itemStockDO);
 
@@ -61,7 +62,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemModel> listItem() {
-        return null;
+        List<ItemDO> itemDOList = itemDOMapper.listItem();
+        List<ItemModel> itemModelList = itemDOList.stream().map(itemDO -> {
+            ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
+            return convertItemModelFromPojo(itemDO, itemStockDO);
+        }).collect(Collectors.toList());
+
+        return itemModelList;
     }
 
     @Override

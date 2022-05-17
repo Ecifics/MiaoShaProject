@@ -7,12 +7,11 @@ import com.miaoshaproject.service.ItemService;
 import com.miaoshaproject.service.model.ItemModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Ecifics
@@ -27,6 +26,7 @@ public class ItemController extends BaseController {
     @Autowired
     private ItemService itemService;
 
+    @PostMapping(value = "/create", consumes = {CONTENT_TYPE_FORMED})
     public CommonReturnType createItem(@RequestParam("title") String title,
                                        @RequestParam("description") String description,
                                        @RequestParam("price") BigDecimal price,
@@ -43,6 +43,26 @@ public class ItemController extends BaseController {
         ItemModel itemModelFromService = itemService.createItem(itemModel);
 
         ItemVO itemVO = convertItemVOFromModel(itemModelFromService);
+
+        return CommonReturnType.create(itemVO);
+    }
+
+    @GetMapping("/list")
+    public CommonReturnType listItem() {
+        List<ItemModel> itemModelList = itemService.listItem();
+
+        List<ItemVO> itemVOList = itemModelList.stream().map(itemModel -> {
+            return convertItemVOFromModel(itemModel);
+        }).collect(Collectors.toList());
+
+        return CommonReturnType.create(itemVOList);
+    }
+
+    @GetMapping("/get")
+    public CommonReturnType getItem(@RequestParam("id") Integer id) {
+        ItemModel itemModel = itemService.getItemById(id);
+
+        ItemVO itemVO = convertItemVOFromModel(itemModel);
 
         return CommonReturnType.create(itemVO);
     }
