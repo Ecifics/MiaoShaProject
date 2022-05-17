@@ -23,8 +23,8 @@
     delete from user_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.miaoshaproject.pojo.UserDO">
-    insert into user_info (id, name, gender, 
+  <insert id="insert" parameterType="com.miaoshaproject.pojo.UserDO" keyProperty="id" useGeneratedKeys="true">
+    insert into user_info (id, name, gender,
       age, telphone, register_mode, 
       third_party_id)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, 

@@ -15,7 +15,7 @@
                         password="000715">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.ecifics.miaoshaproject.pojo" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.miaoshaproject.pojo" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
@@ -24,16 +24,16 @@
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ecifics.miaoshaproject.dao"  targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.miaoshaproject.dao"  targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="user_info" domainObjectName="UserDO" enableCountByExample="false"
+        <table tableName="item" domainObjectName="ItemDO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" selectByExampleQueryId="false">
         </table>
 
-        <table tableName="user_password" domainObjectName="UserPasswordDO" enableCountByExample="false"
+        <table tableName="item_stock" domainObjectName="ItemStockDO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" selectByExampleQueryId="false">
         </table>

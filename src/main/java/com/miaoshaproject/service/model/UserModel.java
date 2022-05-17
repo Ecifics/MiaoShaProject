@@ -1,9 +1,6 @@
 package com.miaoshaproject.service.model;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 /**
  * @author Ecifics
@@ -34,20 +31,6 @@ public class UserModel {
 
     @NotBlank(message = "密码不能为空")
     private String encrptPassword;
-
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", gender=" + gender +
-                ", age='" + age + '\'' +
-                ", telphone='" + telphone + '\'' +
-                ", registerMode='" + registerMode + '\'' +
-                ", thirdPartyId='" + thirdPartyId + '\'' +
-                ", encrptPassword='" + encrptPassword + '\'' +
-                '}';
-    }
 
     public String getEncrptPassword() {
         return encrptPassword;
