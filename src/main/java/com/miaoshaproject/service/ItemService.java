@@ -30,5 +30,5 @@ public interface ItemService {
      * @param id - specific item id
      * @return item object
      */
-    ItemModel getItem(Integer id);
+    ItemModel getItemById(Integer id);
 }
