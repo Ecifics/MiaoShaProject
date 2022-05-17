@@ -83,6 +83,13 @@ public class ItemServiceImpl implements ItemService {
         return convertItemModelFromPojo(itemDO, itemStockDO);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean descreaseStock(Integer itemId, Integer amount) throws BusinessException {
+        int affectedRows = itemStockDOMapper.descreaseStock(itemId, amount);
+        return affectedRows > 0;
+    }
+
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel) {
         if (itemModel == null) {
             return null;

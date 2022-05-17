@@ -16,6 +16,7 @@ public interface ItemService {
      * 创建商品
      * @param itemModel - item object in service model
      * @return ItemMode object
+     * @exception BusinessException - personal exception
      */
     ItemModel createItem(ItemModel itemModel) throws BusinessException;
 
@@ -31,4 +32,12 @@ public interface ItemService {
      * @return item object
      */
     ItemModel getItemById(Integer id);
+
+    /**
+     * 库存扣减
+     * @param itemId - id of item
+     * @return boolean - check if it is success
+     * @exception BusinessException - personal exception
+     */
+    boolean descreaseStock(Integer itemId, Integer amount) throws BusinessException;
 }

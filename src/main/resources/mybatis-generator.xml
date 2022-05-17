@@ -28,12 +28,7 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="item" domainObjectName="ItemDO" enableCountByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" selectByExampleQueryId="false">
-        </table>
-
-        <table tableName="item_stock" domainObjectName="ItemStockDO" enableCountByExample="false"
+        <table tableName="order_info" domainObjectName="OrderDO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" selectByExampleQueryId="false">
         </table>
