@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer amount) throws BusinessException {
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException {
         // 校验下单状态：下单商品是否合法、用户是否合法、购买数量是否正确
         ItemModel itemModel = itemService.getItemById(itemId);
         if (itemModel == null) {
@@ -60,6 +60,19 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "数量信息不正确");
         }
 
+        // 校验秒杀活动信息
+        if (promoId != null) {
+            // 校验对应活动是否适用对应商品
+            if (promoId.intValue() != itemModel.getPromoModel().getId()) {
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "活动信息不正确");
+            }
+
+            // 校验活动是否正在进行
+            if (itemModel.getPromoModel().getStatus() != 2) {
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "活动还未开始");
+            }
+        }
+
         // 落单（在用户下单之前，先把对应数量的商品给这个用户）减库存，建议采用
         // 支付减库存（落单的时候如果库存足够，就不管，下单的时候再减去数量），不建议采用这种方式
         boolean result = itemService.descreaseStock(itemId, amount);
@@ -72,8 +85,15 @@ public class OrderServiceImpl implements OrderService {
         orderModel.setUserId(userId);
         orderModel.setItemId(itemId);
         orderModel.setAmount(amount);
-        orderModel.setItemPrice(itemModel.getPrice());
-        orderModel.setOrderPrice(itemModel.getPrice().multiply(BigDecimal.valueOf(amount)));
+        orderModel.setPromoId(promoId);
+        if (promoId != null) {
+            orderModel.setItemPrice(itemModel.getPromoModel().getPromoItemPrices());
+        }
+
+        if (promoId == null) {
+            orderModel.setItemPrice(itemModel.getPrice());
+        }
+        orderModel.setOrderPrice(orderModel.getItemPrice().multiply(BigDecimal.valueOf(amount)));
 
         // 生成交易流水号
         orderModel.setId(generateOrderNo());

@@ -21,12 +21,17 @@ public class OrderModel {
     private Integer amount;
 
     /**
-     * 商品单价
+     * 若非空则表示以秒杀商品方式下单
+     */
+    private Integer promoId;
+
+    /**
+     * 商品单价，若promoPrice非空表示秒杀商品价格
      */
     private BigDecimal itemPrice;
 
     /**
-     * 购买金额
+     * 购买金额，若promoPrice非空表示秒杀商品价格
      */
     private BigDecimal orderPrice;
 
@@ -77,5 +82,13 @@ public class OrderModel {
 
     public void setItemPrice(BigDecimal itemPrice) {
         this.itemPrice = itemPrice;
+    }
+
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
     }
 }

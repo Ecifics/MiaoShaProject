@@ -7,7 +7,9 @@ import com.miaoshaproject.error.EmBusinessError;
 import com.miaoshaproject.pojo.ItemDO;
 import com.miaoshaproject.pojo.ItemStockDO;
 import com.miaoshaproject.service.ItemService;
+import com.miaoshaproject.service.PromoService;
 import com.miaoshaproject.service.model.ItemModel;
+import com.miaoshaproject.service.model.PromoModel;
 import com.miaoshaproject.validator.ValidationResult;
 import com.miaoshaproject.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +37,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemStockDOMapper itemStockDOMapper;
+
+    @Autowired
+    private PromoService promoService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -80,7 +85,17 @@ public class ItemServiceImpl implements ItemService {
 
         ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(id);
 
-        return convertItemModelFromPojo(itemDO, itemStockDO);
+        ItemModel itemModel = convertItemModelFromPojo(itemDO, itemStockDO);
+
+        // 获取活动商品信息
+        PromoModel promoModel = promoService.getPromoByItemId(itemModel.getId());
+
+        // 判断是否有秒杀活动信息
+        if (promoModel != null && promoModel.getStatus() != 3) {
+            itemModel.setPromoModel(promoModel);
+        }
+
+        return itemModel;
     }
 
     @Override
