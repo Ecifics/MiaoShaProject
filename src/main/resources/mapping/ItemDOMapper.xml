@@ -109,4 +109,10 @@
     from item
     order by sales DESC
   </select>
+
+  <update id="increaseSales">
+    update item
+    set sales = sales + #{amount}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

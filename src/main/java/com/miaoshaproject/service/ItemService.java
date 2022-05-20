@@ -36,8 +36,18 @@ public interface ItemService {
     /**
      * 库存扣减
      * @param itemId - id of item
+     * @param amount - amount of item
      * @return boolean - check if it is success
-     * @exception BusinessException - personal exception
+     * @exception BusinessException - error
      */
     boolean descreaseStock(Integer itemId, Integer amount) throws BusinessException;
+
+
+    /**
+     * 销量增加
+     * @param itemId  - id of item
+     * @param amount - amount of item
+     * @exception  BusinessException - error
+     */
+    void increaseSales(Integer itemId, Integer amount) throws BusinessException;
 }

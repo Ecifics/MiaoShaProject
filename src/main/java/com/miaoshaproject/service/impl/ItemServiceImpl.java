@@ -90,6 +90,12 @@ public class ItemServiceImpl implements ItemService {
         return affectedRows > 0;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void increaseSales(Integer itemId, Integer amount) throws BusinessException {
+        itemDOMapper.increaseSales(itemId, amount);
+    }
+
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel) {
         if (itemModel == null) {
             return null;
