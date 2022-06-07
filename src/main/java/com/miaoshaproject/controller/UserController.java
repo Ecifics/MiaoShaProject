@@ -9,6 +9,7 @@ import com.miaoshaproject.service.UserService;
 import com.miaoshaproject.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Encoder;
 
@@ -17,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ecifics
@@ -33,6 +36,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private HttpServletRequest httpServletRequest;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @PostMapping(value = "/getotp", consumes = {CONTENT_TYPE_FORMED})
     public CommonReturnType getOtp(@RequestParam("telphone") String telphone) {
@@ -101,11 +107,16 @@ public class UserController extends BaseController {
         // 用户登录校验
         UserModel userModel = userService.validateLogin(telphone, this.encodeByMd5(password));
 
-        // 校验成功，加入到用户登录成功的session内
-        this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
-        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
+        // 校验成功，将登录信息和登录凭证一起存入redis中
+        // 生成登录凭证token
+        String uuidToken = UUID.randomUUID().toString().replace("-", "");
 
-        return CommonReturnType.create(null);
+        // 建立token和用户登录状态之间的联系
+        redisTemplate.opsForValue().set(uuidToken, userModel);
+        redisTemplate.expire(uuidToken, 1, TimeUnit.HOURS);
+
+        // 下发token
+        return CommonReturnType.create(uuidToken);
     }
 
     public String encodeByMd5(String password) throws NoSuchAlgorithmException {

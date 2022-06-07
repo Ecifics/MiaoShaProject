@@ -7,6 +7,8 @@ import com.miaoshaproject.service.OrderService;
 import com.miaoshaproject.service.model.OrderModel;
 import com.miaoshaproject.service.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,19 +29,26 @@ public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @PostMapping(value = "/createorder", consumes = {CONTENT_TYPE_FORMED})
     public CommonReturnType createOrder(@RequestParam("itemId") Integer itemId,
                                         @RequestParam(name = "promoId", required = false) Integer promoId,
                                         @RequestParam("amount") Integer amount) throws BusinessException {
-        // 获取用户登录信息
-        Boolean isLogin = (Boolean) httpServletRequest.getSession().getAttribute("IS_LOGIN");
-        if (isLogin == null || isLogin == false) {
+        // 获取用户登录凭证
+        String token = httpServletRequest.getParameterMap().get("token")[0];
+        if (StringUtils.isEmpty(token)) {
             throw new BusinessException(EmBusinessError.USER_NOT_LOGIN, "用户还未登录，不能下单");
         }
 
-        UserModel loginUser = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
+        // 获取用户的登录信息
+        UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
+        if (userModel == null) {
+            throw new BusinessException(EmBusinessError.USER_NOT_LOGIN, "用户还未登录，不能下单");
+        }
 
-        OrderModel orderModel = orderService.createOrder(loginUser.getId(), itemId, promoId, amount);
+        OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, promoId, amount);
 
         return CommonReturnType.create(null);
     }

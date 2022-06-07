@@ -1,13 +1,14 @@
 package com.miaoshaproject.service.model;
 
 import javax.validation.constraints.*;
+import java.io.Serializable;
 
 /**
  * @author Ecifics
  * @Description service层对象
  * @date 5/14/2022-7:34 PM
  */
-public class UserModel {
+public class UserModel implements Serializable {
 
     private Integer id;
 

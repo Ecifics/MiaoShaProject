@@ -28,6 +28,7 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
+
         <table tableName="promo" domainObjectName="PromoDO" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" selectByExampleQueryId="false">
